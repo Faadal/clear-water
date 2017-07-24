@@ -17,6 +17,9 @@ results_df<- data.frame( "Date" = results_df$Culture.Sample.1.Timestamp,
                  "DNA.Reading.2" = results_df$DNA.Sample.2.Reading,
                  "DNA.Geo.Mean" = results_df$DNA.Reading.Mean)
 
+#add "Date" field for days when there was a DNA test but no Culture test
+results_df[is.na(results_df$Date),"Date"] <- results_df[is.na(results_df$Date),"DNA.Sample.Timestamp"]
+
 #Split the Date column into Year, Month, and Day columns
 results_df$Year <- as.character(results_df$Date, format='%Y')
 results_df$Month <- as.character(results_df$Date, format='%m')
