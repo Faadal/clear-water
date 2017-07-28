@@ -57,6 +57,9 @@ df_model <- df[, c("Escherichia.coli", #dependent variable
                    "Montrose_DNA.Geo.Mean",
                    "Calumet_DNA.Geo.Mean",
                    "Rainbow_DNA.Geo.Mean",
+                   # "n12th_Escherichia.coli",
+                   # "Oak_Street_Escherichia.coli",
+                   # "Leone_Escherichia.coli",
                    "Date", #Must use for splitting data, not included in model
                    "Predicted.Level" #Must use for USGS model comparison, not included in model
                    )]
@@ -74,7 +77,7 @@ kFolds <- TRUE #If TRUE next 4 lines will not be used but cannot be commented ou
 trainStart <- "2006-01-01"
 trainEnd <- "2015-12-31"
 testStart <- "2016-01-01"
-testEnd <- "2016-12-31"
+testEnd <- "2016-07-26"
 
 # If productionMode is set to TRUE, a file named model.Rds will be generated
 # Its used is explained at https://github.com/Chicago/clear-water-app
