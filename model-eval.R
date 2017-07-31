@@ -33,24 +33,24 @@ dt <- results_df[!is.na(Predicted.Level) &
                    Predicted.Level,
                    Escherichia.coli)]
 dt <- dt[Client.ID %in% c("12th",
-                          "31st",
+                          # "31st",
                           "39th",
                           "57th",
                           # "63rd",
                           "Albion",
                           # "Calumet",
-                          "Foster",
+                          # "Foster",
                           "Howard",
-                          "Jarvis",
+                          # "Jarvis",
                           "Juneway",
                           "Leone",
                           # "Montrose",
                           "North Avenue",
-                          "Oak Street",
-                          "Ohio",
-                          "Osterman",
+                          # "Oak Street",
+                          # "Ohio",
+                          "Osterman")]
                           # "Rainbow",     
-                          "Rogers")]
+                          # "Rogers"
                           # "South Shore")]
 dt <- na.omit(dt)
 dt[Predicted.Level >= 235, predHigh := 1]

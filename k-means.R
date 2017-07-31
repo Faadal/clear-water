@@ -4,7 +4,7 @@ library(data.table)
 # y - freq of elevated occurances
 
 clusters <- 5
-reclusters <- 3
+reclusters <- 5
 
 source("R/00_startup.R")
 df <- readRDS(paste0(getwd(),"/Data/df.Rds"))
@@ -41,8 +41,8 @@ plot(dt_byBeach[exceedances < 165,
      main=paste0("K-Means result with ", reclusters, " reclusters"), 
      pch=20, 
      cex=2)
-dt_byBeach$recluster <- km$cluster
+dt_byBeach[exceedances < 165,"recluster"] <- km2$cluster
 
 dt_byBeach[order(exceedances, decreasing = TRUE)]
 
-# Choice of 3 visually: 12th, Oak Street, Leone
+# Choice of 5 visually: Jarvis, Ohio, Foster, Oak Street, Rogers

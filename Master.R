@@ -42,7 +42,7 @@ df_model <- df[, c("Escherichia.coli", #dependent variable
                    "Client.ID",
                    # "precipProbability",
                    # "Water.Level",
-                   "Rogers_Escherichia.coli",
+                   "Rogers_Escherichia.coli", 
                    # "Howard_Escherichia.coli",
                    # "n57th_Escherichia.coli", 
                    # "n63rd_Escherichia.coli",
@@ -52,19 +52,22 @@ df_model <- df[, c("Escherichia.coli", #dependent variable
                    # "Rainbow_Escherichia.coli",
                    # "Ohio_DNA.Geo.Mean",
                    # "North_Avenue_DNA.Geo.Mean",
-                   "n63rd_DNA.Geo.Mean",
-                   "South_Shore_DNA.Geo.Mean",
-                   "Montrose_DNA.Geo.Mean",
-                   "Calumet_DNA.Geo.Mean",
-                   "Rainbow_DNA.Geo.Mean",
+                   # "n63rd_DNA.Geo.Mean",
+                   # "South_Shore_DNA.Geo.Mean",
+                   # "Montrose_DNA.Geo.Mean",
+                   # "Calumet_DNA.Geo.Mean",
+                   # "Rainbow_DNA.Geo.Mean",
                    # "n12th_Escherichia.coli",
-                   # "Oak_Street_Escherichia.coli",
+                   "Oak_Street_Escherichia.coli",
+                   "Ohio_Escherichia.coli",
+                   # "Jarvis_Escherichia.coli",
+                   "Foster_Escherichia.coli",
                    # "Leone_Escherichia.coli",
-                   "Date", #Must use for splitting data, not included in model
-                   "Predicted.Level" #Must use for USGS model comparison, not included in model
+                   "Date" #Must use for splitting data, not included in model
+                   # "Predicted.Level" #Must use for USGS model comparison, not included in model
                    )]
 # to run without USGS for comparison, comment out "Predicted.Level" above and uncomment next line
-# df_model$Predicted.Level <- 1 #meaningless value
+df_model$Predicted.Level <- 1 #meaningless value
 
 #-------------------------------------------------------------------------------
 #  CHOOSE TEST/TRAIN SETS
@@ -73,11 +76,11 @@ df_model <- df[, c("Escherichia.coli", #dependent variable
 #  If you set kFolds to FALSE, the model will use trainStart, trainEnd, etc. (see below)
 #-------------------------------------------------------------------------------
 
-kFolds <- TRUE #If TRUE next 4 lines will not be used but cannot be commented out
+kFolds <- FALSE #If TRUE next 4 lines will not be used but cannot be commented out
 trainStart <- "2006-01-01"
 trainEnd <- "2015-12-31"
 testStart <- "2016-01-01"
-testEnd <- "2016-07-26"
+testEnd <- "2016-12-31"
 
 # If productionMode is set to TRUE, a file named model.Rds will be generated
 # Its used is explained at https://github.com/Chicago/clear-water-app
@@ -111,21 +114,21 @@ downsample <- FALSE #If FALSE comment out the next 3 lines
 
 excludeBeaches <- c(
                     # "12th",
-                    # "31st",
+                    "31st",
                     # "39th",
                     # "57th",
                     "63rd",
                     # "Albion",
                     "Calumet",
-                    # "Foster",
+                    "Foster",
                     # "Howard",
-                    # "Jarvis",
+                    "Jarvis",
                     # "Juneway",
                     # "Leone",
                     "Montrose",
                     # "North Avenue",
-                    # "Oak Street",
-                    # "Ohio",
+                    "Oak Street",
+                    "Ohio",
                     # "Osterman",
                     "Rainbow",
                     "Rogers",
