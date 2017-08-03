@@ -46,3 +46,4 @@ dt_byBeach[exceedances < 165,"recluster"] <- km2$cluster
 dt_byBeach[order(exceedances, decreasing = TRUE)]
 
 # Choice of 5 visually: Jarvis, Ohio, Foster, Oak Street, Rogers
+# getting some better results with 12th, Ohio, Oak Street, and Leone. Jarvis doesn't have enough history?
