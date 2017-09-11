@@ -8,7 +8,7 @@ results_df <- data.table(readRDS(paste0(getwd(),"/Data/df.Rds")))
 
 # 2017 Pilot results
 
-thresh <- 415
+thresh <- 375
 df <- merge(preds, labs, by.x = c("Beach.Name", "Date"), by.y = c("Beach", "DNA.Sample.Timestamp"))
 dt <- data.table(df)
 dt[Predicted.Level >= thresh, predHigh := 1]
@@ -23,6 +23,29 @@ tpr <- tp / (tp + fn)
 fpr <- fp / (fp + tn)
 tpr
 fpr
+
+# find good example date
+
+dt$modelwin <- (dt$predHigh == 1 & dt$actualHigh == 1) # | (dt$predHigh == 0 & dt$actualHigh == 0)
+labs2 <- labs[labs$DNA.Sample.Timestamp > as.Date("2017-01-01") &
+                !is.na(labs$DNA.Sample.Timestamp),]
+labs2$highlevels <- labs2$DNA.Reading.Mean > 1000
+labs2 <- data.table(labs2)
+
+modelwins <- dt[,sum(modelwin),.(Date)]
+modelwins[order(-rank(V1))]
+rapidwins <- labs2[,sum(highlevels),.(DNA.Sample.Timestamp)]
+rapidwins[order(-rank(V1))]
+
+predicted <- dt[as.Date(Date) == as.Date("2017-06-14")]
+# tested <- labs2[DNA.Sample.Timestamp == as.Date("2017-06-14") & Beach %in% c("Rainbow", "South Shore", "Calumet", "Montrose", "63rd Street")]
+tested <- labs2[DNA.Sample.Timestamp == as.Date("2017-06-14")]
+
+View(predicted)
+View(tested)
+
+write.csv(predicted, "predicted-2017-06-14.csv", row.names = FALSE)
+write.csv(tested, "tested-2017-06-14.csv", row.names = FALSE)
 
 # USGS results
 
