@@ -6,7 +6,7 @@ library(data.table)
 clusters <- 5
 reclusters <- 5
 
-source("R/00_startup.R")
+source("R/00_Startup.R")
 df <- readRDS(paste0(getwd(),"/Data/df.Rds"))
 dt <- data.table(df)
 dt[Escherichia.coli >= 235, exceedance := 1]
