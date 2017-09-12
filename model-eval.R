@@ -76,8 +76,8 @@ dt <- dt[Client.ID %in% c("12th",
                           # "Rogers"
                           # "South Shore")]
 dt <- na.omit(dt)
-dt[Predicted.Level >= 235, predHigh := 1]
-dt[Predicted.Level < 235, predHigh := 0]
+dt[Predicted.Level >= 170, predHigh := 1]
+dt[Predicted.Level < 170, predHigh := 0]
 dt[Escherichia.coli >= 235, actualHigh := 1]
 dt[Escherichia.coli < 235, actualHigh := 0]
 tp <- sum(dt$actualHigh == 1 & dt$predHigh == 1)
