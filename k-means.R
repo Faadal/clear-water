@@ -4,18 +4,18 @@ library(data.table)
 # y - freq of elevated occurances
 
 clusters <- 6
-reclusters <- 4
+reclusters <- 3
 
 source("R/00_Startup.R")
 df <- readRDS(paste0(getwd(),"/Data/df.Rds"))
 dt <- data.table(df)
 
-dt <- dt[Year %in% c(#"2006",
-                     #"2007",
-                     #"2008",
-                     #"2009",
-                     #"2010",
-                     #"2011",
+dt <- dt[Year %in% c("2006",
+                     "2007",
+                     "2008",
+                     "2009",
+                     "2010",
+                     "2011",
                      "2012",
                      "2013",
                      "2014",
@@ -66,18 +66,18 @@ dt_byBeach[order(exceedances, decreasing = TRUE)]
 
 # remove worst clusters (these are the beaches to always test)
 
-km2 <- kmeans(scale(dt_byBeach[!cluster %in% c(1,3),
+km2 <- kmeans(scale(dt_byBeach[!cluster %in% c(1,3,5),
                          2:3]),
              centers = reclusters,
              nstart = 100)
 
-plot(dt_byBeach[!cluster %in% c(1,3),
+plot(dt_byBeach[!cluster %in% c(1,3,5),
                 2:3],
      col =(km2$cluster +1),
      main=paste0("K-Means result with ", reclusters, " reclusters"), 
      pch=20, 
      cex=2)
-dt_byBeach[!cluster %in% c(1,3),"recluster"] <- km2$cluster
+dt_byBeach[!cluster %in% c(1,3,5),"recluster"] <- km2$cluster
 
 dt_byBeach[order(exceedances, decreasing = TRUE)]
 
