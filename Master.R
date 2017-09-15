@@ -40,54 +40,27 @@ rm(list=ls()[!ls() %in% keep])
 # set predictors
 df_model <- df[, c("Escherichia.coli", #dependent variable
                    "Client.ID",
-                   # "precipProbability",
-                   # "Water.Level",
-                   # "n12th_Escherichia.coli",
                    "Foster_Escherichia.coli",
-                   # "Ohio_Escherichia.coli",
                    "North_Avenue_Escherichia.coli",
                    "n31st_Escherichia.coli",
                    "Leone_Escherichia.coli",
-                   # "Albion_Escherichia.coli",
-                   # "Rogers_Escherichia.coli",
-                   # "Howard_Escherichia.coli",
-                   # "n57th_Escherichia.coli",
-                   # "n63rd_Escherichia.coli",
                    "South_Shore_Escherichia.coli",
-                   # "Montrose_Escherichia.coli",
-                   # "Calumet_Escherichia.coli",
-                   # "Rainbow_Escherichia.coli",
-                   # "Ohio_DNA.Geo.Mean",
-                   # "North_Avenue_DNA.Geo.Mean",
-                   # "n63rd_DNA.Geo.Mean",
-                   # "South_Shore_DNA.Geo.Mean",
-                   # "Montrose_DNA.Geo.Mean",
-                   # "Calumet_DNA.Geo.Mean",
-                   # "Rainbow_DNA.Geo.Mean",
                    "Year" #used for splitting data
                    )]
 
 finaltest <- df_model[df_model$Year == "2016",]
 
 #-------------------------------------------------------------------------------
-#  CHOOSE TEST/TRAIN SETS
-#  You can decide whether to use kFolds cross validation or define your own sets
-#  If you set kFolds to TRUE, the data will be separated into 10 sets
-#  If you set kFolds to FALSE, the model will use trainStart, trainEnd, etc. (see below)
+#  CHOOSE TEST/TRAIN SETS FOR VALIDATION AND TUNING
+#  Choose the test year, and the model will train on all other years
 #-------------------------------------------------------------------------------
 
-kFolds <- FALSE #If TRUE next 2 lines will not be used but cannot be commented out
 testYears <- c("2015")
-trainYears <- c("2006", "2007", "2008", "2009","2010", "2011", "2012", "2013", "2014", "2015")
-trainYears <- trainYears[! trainYears %in% testYears]
 
-# If productionMode is set to TRUE, a file named model.Rds will be generated
-# Its used is explained at https://github.com/Chicago/clear-water-app
-# Set trainYears to what you would like the model to train on
-# testYears must still be specified, although not applicable
-# plots will not be accurate
+# PRODUCTION MODE: If TRUE, train on all years available, save model.Rds file in
+# working directory, and do not produce plots
 
-productionMode <- TRUE
+productionMode <- FALSE
 
 #-------------------------------------------------------------------------------
 #  DOWNSAMPLING
@@ -98,9 +71,9 @@ productionMode <- TRUE
 
 # downsample settings
 downsample <- FALSE #If FALSE comment out the next 3 lines
-highMin <- 235
-highMax <- 2500
-lowMax <- 235
+# highMin <- 235
+# highMax <- 2500
+# lowMax <- 235
 
 
 #-------------------------------------------------------------------------------
@@ -139,14 +112,8 @@ excludeBeaches <- c(
 #  These are automatically generated based on the settings chosen above
 #-------------------------------------------------------------------------------
 
-title1 <- paste0("ROC", 
-                 if(kFolds == TRUE) " - kFolds",
-                 if(kFolds == FALSE) " - validate on ",
-                 if(kFolds == FALSE) testYears)
-title2 <- paste0("PR Curve", 
-                 if(kFolds == TRUE) " - kFolds",
-                 if(kFolds == FALSE) " - validate on ",
-                 if(kFolds == FALSE) testYears)
+title1 <- paste0("ROC", " - validate on ", testYears)
+title2 <- paste0("PR Curve", " - validate on ", testYears)
 
 
 #-------------------------------------------------------------------------------
@@ -171,17 +138,19 @@ source("R/30_Model.R", print.eval=TRUE)
 # creates a data frame with all model results
 # this aggregates the folds to generate one single curve
 # for user-defined test set, this doesn't have any effect
+if (!productionMode) {
 model_summary <- plot_data %>%
-  group_by(thresholds) %>%
-  summarize(tpr = mean(tpr),
-            fpr = mean(fpr),
-            precision = mean(precision, na.rm = TRUE),
-            recall = mean(recall),
-            tp = mean(tp),
-            fn = mean(fn),
-            tn = mean(tn),
-            fp = mean(fp)
-            )
+    group_by(thresholds) %>%
+    summarize(tpr = mean(tpr),
+              fpr = mean(fpr),
+              precision = mean(precision, na.rm = TRUE),
+              recall = mean(recall),
+              tp = mean(tp),
+              fn = mean(fn),
+              tn = mean(tn),
+              fp = mean(fp)
+              )
+}
 
 ## final holdout validation
 
