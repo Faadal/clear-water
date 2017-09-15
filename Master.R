@@ -65,10 +65,7 @@ df_model <- df[, c("Escherichia.coli", #dependent variable
                    # "Calumet_DNA.Geo.Mean",
                    # "Rainbow_DNA.Geo.Mean",
                    "Year" #used for splitting data
-                   # "Predicted.Level" #Must use for USGS model comparison, not included in model
                    )]
-# to run without USGS for comparison, comment out "Predicted.Level" above and uncomment next line
-df_model$Predicted.Level <- 1 #meaningless value
 
 finaltest <- df_model[df_model$Year == "2016",]
 
@@ -82,7 +79,7 @@ finaltest <- df_model[df_model$Year == "2016",]
 kFolds <- FALSE #If TRUE next 2 lines will not be used but cannot be commented out
 testYears <- c("2015")
 trainYears <- c("2006", "2007", "2008", "2009","2010", "2011", "2012", "2013", "2014", "2015")
-# trainYears <- trainYears[! trainYears %in% testYears]
+trainYears <- trainYears[! trainYears %in% testYears]
 
 # If productionMode is set to TRUE, a file named model.Rds will be generated
 # Its used is explained at https://github.com/Chicago/clear-water-app
@@ -178,20 +175,12 @@ model_summary <- plot_data %>%
   group_by(thresholds) %>%
   summarize(tpr = mean(tpr),
             fpr = mean(fpr),
-            tprUSGS = mean(tprUSGS),
-            fprUSGS = mean(fprUSGS),
             precision = mean(precision, na.rm = TRUE),
             recall = mean(recall),
-            precisionUSGS = mean(precisionUSGS, na.rm = TRUE),
-            recallUSGS = mean(recallUSGS),
             tp = mean(tp),
             fn = mean(fn),
             tn = mean(tn),
-            fp = mean(fp),
-            tpUSGS = mean(tpUSGS),
-            fnUSGS = mean(fnUSGS),
-            tnUSGS = mean(tnUSGS),
-            fpUSGS = mean(fpUSGS)
+            fp = mean(fp)
             )
 
 ## final holdout validation
