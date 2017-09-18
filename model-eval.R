@@ -8,7 +8,7 @@ results_df <- data.table(readRDS(paste0(getwd(),"/Data/df.Rds")))
 
 # 2017 Pilot results
 
-thresh <- 375
+thresh <- 381
 df <- merge(preds, labs, by.x = c("Beach.Name", "Date"), by.y = c("Beach", "DNA.Sample.Timestamp"))
 dt <- data.table(df)
 dt[Predicted.Level >= thresh, predHigh := 1]
