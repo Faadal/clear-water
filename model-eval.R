@@ -24,6 +24,17 @@ fpr <- fp / (fp + tn)
 tpr
 fpr
 
+labsDt <- data.table(labs)
+labsDt <- labsDt[DNA.Sample.Timestamp > as.Date("2017-01-01") &
+                   Beach %in% c("Rainbow",
+                                "Calumet",
+                                "63rd Street",
+                                "Montrose",
+                                "South Shore")]
+labsDt[DNA.Reading.Mean >= 1000, actualHigh := 1]
+labsDt[DNA.Reading.Mean < 1000, actualHigh := 0]
+table(labsDt$actualHigh)
+
 # find good example date
 
 dt$modelwin <- (dt$predHigh == 1 & dt$actualHigh == 1) # | (dt$predHigh == 0 & dt$actualHigh == 0)
@@ -50,34 +61,34 @@ write.csv(tested, "tested-2017-06-14.csv", row.names = FALSE)
 # USGS results
 
 dt <- results_df[!is.na(Predicted.Level) &
-                   Date > as.Date("2016-01-01"),
+                   Date < as.Date("2016-01-01"),
                  .(Date, 
                    Client.ID, 
                    Predicted.Level,
                    Escherichia.coli)]
 dt <- dt[Client.ID %in% c("12th",
-                          # "31st",
+                          "31st",
                           "39th",
                           "57th",
                           # "63rd",
                           "Albion",
                           # "Calumet",
-                          # "Foster",
+                          "Foster",
                           "Howard",
-                          # "Jarvis",
-                          "Juneway",
+                          "Jarvis",
+                          # "Juneway",
                           "Leone",
                           # "Montrose",
                           "North Avenue",
-                          # "Oak Street",
-                          # "Ohio",
-                          "Osterman")]
-                          # "Rainbow",     
-                          # "Rogers"
+                          "Oak Street",
+                          "Ohio",
+                          "Osterman",
+                          # "Rainbow",
+                          "Rogers")]
                           # "South Shore")]
 dt <- na.omit(dt)
-dt[Predicted.Level >= 170, predHigh := 1]
-dt[Predicted.Level < 170, predHigh := 0]
+dt[Predicted.Level >= 235, predHigh := 1]
+dt[Predicted.Level < 235, predHigh := 0]
 dt[Escherichia.coli >= 235, actualHigh := 1]
 dt[Escherichia.coli < 235, actualHigh := 0]
 tp <- sum(dt$actualHigh == 1 & dt$predHigh == 1)
