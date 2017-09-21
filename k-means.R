@@ -1,4 +1,5 @@
 library(data.table)
+library(ggplot2)
 
 # x - latitude
 # y - freq of elevated occurances
@@ -81,5 +82,9 @@ dt_byBeach[!cluster %in% c(2,5),"recluster"] <- km2$cluster
 
 dt_byBeach[order(exceedances, decreasing = TRUE)]
 
-# Choice of 5 visually: Jarvis, Ohio, Foster, Oak Street, Rogers
-# getting some better results with 12th, Ohio, Oak Street, and Leone. Jarvis doesn't have enough history?
+lm(exceedances ~ breakwater, dt_byBeach)
+
+ggplot(dt_byBeach, aes(breakwater, exceedances)) + 
+  geom_point(color = "blue", size = 2) + 
+  geom_abline(slope = .1202, intercept = 60.8528, linetype = "dashed") +
+  labs(x = "Breakwater Length (ft)", y = "Total E. coli Exceedances", title = "Chicago Beaches 2006 - 2017")
