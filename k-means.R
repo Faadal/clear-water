@@ -84,7 +84,12 @@ dt_byBeach[order(exceedances, decreasing = TRUE)]
 
 lm(exceedances ~ breakwater, dt_byBeach)
 
-ggplot(dt_byBeach, aes(breakwater, exceedances)) + 
-  geom_point(color = "blue", size = 2) + 
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+dt_byBeach$cluster <- as.factor(dt_byBeach$cluster)
+ggplot(dt_byBeach, aes(breakwater, exceedances, color = cluster, shape = cluster)) +
+  geom_point(size = 3) + 
   geom_abline(slope = .1202, intercept = 60.8528, linetype = "dashed") +
-  labs(x = "Breakwater Length (ft)", y = "Total E. coli Exceedances", title = "Chicago Beaches 2006 - 2017")
+  labs(x = "Breakwater Length (ft)", y = "Total E. coli Exceedances", title = "Chicago Beaches 2006 - 2017") +
+  guides(fill = "legend") +
+  scale_fill_manual(values=cbPalette)
+
